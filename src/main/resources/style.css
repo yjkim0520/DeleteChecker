@@ -46,3 +46,16 @@
 .keep-btn:hover {
     -fx-background-color: #7bed9f;
 }
+
+/* Makes all standard text bright and readable in dark mode */
+.label, .text-area {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* Ensure text area backgrounds match the card */
+.text-area {
+    -fx-control-inner-background: #2b2b36;
+    -fx-background-color: transparent;
+}
