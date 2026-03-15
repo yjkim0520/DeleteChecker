@@ -1,0 +1,48 @@
+/* The main dark background */
+.root-pane {
+    -fx-background-color: #1e1e24;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* The top status text */
+.status-label {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* The floating card in the center */
+.card {
+    -fx-background-color: #2b2b36;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 20;
+    /* Soft drop shadow to make it pop */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 20, 0, 0, 10); 
+}
+
+/* General button styling */
+.action-btn {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-radius: 30;
+    -fx-padding: 15 40 15 40;
+    -fx-cursor: hand;
+}
+
+/* Red Trash Button */
+.trash-btn {
+    -fx-background-color: #ff4757;
+}
+.trash-btn:hover {
+    -fx-background-color: #ff6b81;
+}
+
+/* Green Keep Button */
+.keep-btn {
+    -fx-background-color: #2ed573;
+}
+.keep-btn:hover {
+    -fx-background-color: #7bed9f;
+}
