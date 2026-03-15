@@ -78,8 +78,7 @@ public class Main extends Application {
             }
         });
 
-        // We will link a CSS file here in the next step!
-        // scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
         primaryStage.setTitle("DeleteChecker - FileSwipe");
         primaryStage.setScene(scene);
