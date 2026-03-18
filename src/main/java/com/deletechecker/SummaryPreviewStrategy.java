@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 public class SummaryPreviewStrategy implements PreviewStrategy {
 
@@ -63,7 +65,11 @@ public class SummaryPreviewStrategy implements PreviewStrategy {
         container.getChildren().addAll(nameLabel, typeLabel, sizeLabel, dateLabel);
 
         // 5. Add a Content Snippet (Only if it's a safe text file)
-        if (TEXT_EXTENSIONS.contains(item.getExtension().toLowerCase())) {
+        // 5. Add a Content Snippet for Text OR PDF files
+        boolean isTextFile = TEXT_EXTENSIONS.contains(item.getExtension().toLowerCase());
+        boolean isPdf = item.getExtension().equalsIgnoreCase("pdf");
+
+        if (isTextFile || isPdf) {
             Label snippetTitle = new Label("Content Preview:");
             snippetTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 20 0 5 0;");
             
@@ -74,15 +80,23 @@ public class SummaryPreviewStrategy implements PreviewStrategy {
             snippetArea.setStyle("-fx-control-inner-background: #1e1e24; -fx-text-fill: #e0e0e0; -fx-font-family: monospace;");
             
             try {
-                // Grab just the first 15 lines so the app doesn't freeze on massive logs
-                List<String> lines = Files.lines(item.getFile().toPath()).limit(15).toList();
-                String previewText = String.join("\n", lines);
-                if (lines.size() == 15) {
-                    previewText += "\n\n... [File truncated for preview] ...";
+                String previewText = "";
+                if (isPdf) {
+                    // --- NEW PDF READING LOGIC ---
+                    try (PDDocument document = PDDocument.load(item.getFile())) {
+                        PDFTextStripper stripper = new PDFTextStripper();
+                        stripper.setEndPage(1); // Only read page 1 to keep it lightning fast
+                        previewText = stripper.getText(document).trim();
+                        if (previewText.isEmpty()) previewText = "[This PDF contains mostly images/scans and no readable text]";
+                    }
+                } else {
+                    // --- EXISTING TEXT READING LOGIC ---
+                    List<String> lines = Files.lines(item.getFile().toPath()).limit(15).toList();
+                    previewText = String.join("\n", lines);
                 }
                 snippetArea.setText(previewText);
             } catch (Exception e) {
-                snippetArea.setText("[Cannot read text content]");
+                snippetArea.setText("[Cannot extract content from this file]");
             }
             
             container.getChildren().addAll(snippetTitle, snippetArea);
